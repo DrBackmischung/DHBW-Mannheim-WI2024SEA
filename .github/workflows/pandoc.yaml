@@ -1,0 +1,28 @@
+name: Generate Glossary HTML
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate_glossary:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install pandoc
+      run: sudo apt-get install pandoc
+
+    - name: Generate glossary HTML
+      run: pandoc glossary/*.md -o glossary.html
+
+    - name: Commit generated glossary
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add glossary.html
+        git commit -m "Update glossary.html"
+        git push
